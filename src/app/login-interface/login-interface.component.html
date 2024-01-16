@@ -1,0 +1,37 @@
+<app-navbar></app-navbar>
+<body>
+
+  <div class="mainpage">
+    <div class="form-wrapper">
+      <h2>Sign In</h2>
+      <form class="login-form" [formGroup]="loginForm">
+        <div class="form-control">
+          <input
+            type="email"
+            required
+            formControlName="email"
+            placeholder="Email"
+          />
+        </div>
+        <br />
+        <div class="form-control">
+          <input
+            type="password"
+            required
+            formControlName="password"
+            placeholder="Password"
+          />
+        </div>
+
+        <button class="button" type="submit" (click)="logindata()">
+          Sign In
+        </button>
+
+      </form>
+      <small>
+        This page is protected by Google reCAPTCHA.
+        <a href="#">Learn More</a>
+      </small>
+    </div>
+  </div>
+</body>

@@ -1,0 +1,20 @@
+
+<div class="navbar">
+    <div class="logo" routerLink="/home">DASHBOARD</div>
+    <button class="navbar-toggler" (click)="toggleNavbar()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="navbar-links" [class.collapsed]="isNavbarCollapsed">
+      <a routerLink="/home"><button>Home</button></a>
+  
+      <a routerLink="/amount"><button class="signin" >Payment</button></a>
+  
+      <a><button >Sign Out </button></a>
+  
+      <a ><img class="rounded-circle"  style="height: 50px; width: 50px;" id="photo">
+        <div class="hide"></div></a>
+    </div>
+  </div>
+  
