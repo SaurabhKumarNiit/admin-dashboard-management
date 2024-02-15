@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -76,8 +76,13 @@ export class ApiService {
   }
 
   saveFeedbacks(formData:any) {
-    console.log(formData);
+    // console.log(formData);
     return this.http.post(`${this.baseurl}/feedback`, formData);
+  }
+
+ verifyOtp(formData:any) {
+    console.log(formData);
+    return this.http.post(`${this.baseurl}/otpVerify`, formData);
   }
 
   getAllFeedbacks(): Observable<any> {
@@ -87,5 +92,15 @@ export class ApiService {
   RemoveUser(email:string) {
     this.data = this.getEmail();
     return this.http.delete<any>(`${this.baseurl}/user/delete/${email}`);
+  }
+
+  generateTokenStep1(data:any , accessToken:any): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: accessToken
+    });
+    return this.http.post(
+     'https://zoom.us/oauth/token', data, { headers: httpHeaders, observe: 'response' }
+    );
   }
 }

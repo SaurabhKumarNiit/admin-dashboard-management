@@ -1,22 +1,49 @@
-<!-- booking.component.html -->
+<div class="h-5">
 
-<div class="booking-container">
-    <h2>Book Time Slot</h2>
-  
+</div>
+<div class="flex justify-center	">
+  <div class="max-w-4xl  p-20 border-2 border-[#000] rounded-[12px]">
     <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="date">Select Date:</label>
-        <input type="date" id="date" formControlName="date" (change)="onDateChange($event)" />
-      </div>
+   <div class="flex">
+    <div style="width: 450px;" >
+      <mat-calendar [(selected)]="selected"></mat-calendar>
+    </div>
   
-      <div class="form-group">
-        <label for="timeSlot">Select Time Slot:</label>
-        <select id="timeSlot" formControlName="timeSlot">
-          <option *ngFor="let slot of availableTimeSlots" [value]="slot">{{ slot }}</option>
-        </select>
-      </div>
+    <div class="form-group">
+      <!-- <label for="date">Select Date:</label> -->
+      <mat-form-field style="display: none;">
+        <input matInput [matDatepicker]="picker"  [(ngModel)]="selected" placeholder="Select a date" formControlName="date"
+          (dateChange)="onDateChange($event.value)" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  <!-- 
+    <div class="time-slots-panel">
+      <h3>Available Slots</h3>
+      <ul>
+        <li *ngFor="let slot of filteredAvailableTimeSlots">
+          {{ slot }}
+        </li>
+      </ul>
+    </div> -->
   
-      <button type="submit" [disabled]="bookingForm.invalid">Book Now</button>
+  
+  
+    <div style="margin-left: 40px; padding: 20px;">
+      <h3>Available Slots</h3>
+     <ul *ngFor="let slot of filteredAvailableTimeSlots">
+      <li style="border: 1px solid black; border-radius: 10px; padding: 10px; margin-bottom: 10px;" class="w-100 hover:bg-blue-500 hover:text-neutral-50">
+  <button  class="w-100 " type="submit" (click)="onValueChange(slot)">{{slot}}</button>
+      </li>
+     
+     </ul>
+     {{ isLoading ? 'Booking Slot...' : ' ' }}
+     <mat-progress-spinner class="ml-5 w-50" *ngIf="isLoading;" mode="indeterminate"></mat-progress-spinner>
+    </div>
+   </div>
+
+      <!-- <button class="book-btn" type="submit">Book Now</button> -->
     </form>
   </div>
-  
+</div>

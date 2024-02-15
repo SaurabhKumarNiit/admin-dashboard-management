@@ -6,6 +6,7 @@ import { RegisterInterfaceComponent } from './register-interface/register-interf
 import { DisplayCustomerDetailsComponent } from './display-customer-details/display-customer-details.component';
 import { RegisterAmountComponent } from './register-amount/register-amount.component';
 import { BookingComponent } from './booking/booking.component';
+import { EventDashboardComponent } from './event-dashboard/event-dashboard.component';
 
 const routes: Routes = [
   {path:'',component:DashboardComponent},
@@ -14,6 +15,7 @@ const routes: Routes = [
   {path:'register',component:RegisterInterfaceComponent},
   {path:'amount',component:RegisterAmountComponent},
   {path:'booking',component:BookingComponent},
+  {path:'event',component:EventDashboardComponent},
   {path:'display-details',component:DisplayCustomerDetailsComponent},
 ];
 

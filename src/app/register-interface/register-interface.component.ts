@@ -24,29 +24,38 @@ export class RegisterInterfaceComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private service: ApiService,
-    private route: Router,
+    private router: Router,
     private sharedService:SharedService
   ) {}
 
 
   data: any;
-  _id:any;
-  totalAmount:any;
+  userBookedSlot:any;
+  billAmount:any;
   userEmail:any;
   customerName:any;
   MobileNo:any;
+  readyToVerify:boolean=false;
+  isLoading: boolean = false;
+
+
+  navigateToRegister(){
+    this.router.navigateByUrl('/register');
+  }
 
   ngOnInit(): void {
-    this.sharedService.currentToken.subscribe((GeneretedId: number) => {
-      this._id = GeneretedId;
+    this.sharedService.currentToken.subscribe((GeneretedId: string) => {
+      this.userBookedSlot = GeneretedId;
     });
 
-    console.log(this._id);
+    console.log(this.userBookedSlot);
   }
 
   registrationForm = this.fb.group({
     userName: ['', [Validators.required, Validators.minLength(5)]],
+    totalAmount: ['12000', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
+    bookedSlot: [''],
     phoneNo: [
       '',
       [
@@ -67,26 +76,93 @@ export class RegisterInterfaceComponent implements OnInit {
   get phoneNo() {
     return this.registrationForm.get('phoneNo');
   }
+  get totalAmount() {
+    return this.registrationForm.get('totalAmount');
+  }
+  get bookedSlot() {
+    return this.registrationForm.get('bookedSlot');
+  }
 
-  verifydata() {
+  otpForm = this.fb.group({
+    otp: ['', [Validators.required, Validators.minLength(4)]]
+  })
+  get otp() {
+    return this.otpForm.get('otp');
+  }
+
+  checkData(){
+    // console.log(this.readyToVerify);
+
+    if( this.readyToVerify==false){
+      this.readyToVerify=true;
+    }
+    else{
+      this.readyToVerify=false;
+    }
+  }
+
+  verifydata() { 
+      this.isLoading=true;
+   
+  
     this.service
-      .updateData({
+      .registerCustomer({
         userName: this.userName?.value,
         email: this.email?.value,
         phoneNo: this.phoneNo?.value,
-      },this._id)
+        totalAmount:this.totalAmount?.value,
+        bookedSlot:this.userBookedSlot,
+      })
       .subscribe(
         (data) => {
           console.log(data);
           localStorage.setItem('email',data.email);
-          this.totalAmount=data.totalAmount;
+          this.billAmount=data.totalAmount;
           this.userEmail=data.email;
           this.customerName=data.userName;
           this.MobileNo=data.phoneNo;
 
+          this.readyToVerify=true;
           Swal.fire({
             title:
-              'You are registered SuccessFully',
+              'Otp Send on your registered Email!',
+            showClass: {
+              popup: 'animate__animated animate__fadeInDown',
+            },
+            hideClass: {
+              popup: 'animate__animated animate__fadeOutUp',
+            },
+          });
+          // this.paymentStart();
+          // this.send();
+          this.registrationForm.reset();
+          this.isLoading=false;
+          // this.route.navigateByUrl('/login');
+        },
+        (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+          });
+          this.isLoading=false;
+        }
+      );
+  }
+
+  verifyOtp() { 
+    this.service
+      .verifyOtp({
+        otp: this.otp?.value,
+      })
+      .subscribe(
+        (data) => {
+          console.log(data);
+
+          // this.readyToVerify=true;
+          Swal.fire({
+            title:
+              'OTP Verified',
             showClass: {
               popup: 'animate__animated animate__fadeInDown',
             },
@@ -96,14 +172,13 @@ export class RegisterInterfaceComponent implements OnInit {
           });
           this.paymentStart();
           this.send();
-          this.registrationForm.reset();
-          // this.route.navigateByUrl('/login');
+          this.otpForm.reset();
         },
         (error) => {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'Something went wrong!',
+            text: 'Please Enter Correct OTP!',
           });
         }
       );
@@ -115,7 +190,7 @@ export class RegisterInterfaceComponent implements OnInit {
       from_name:'Admin',
       to_name:this.registrationForm.value.userName,
       form_email:this.registrationForm.value.email,
-      totalAmount:this.totalAmount,
+      totalAmount:this.registrationForm.value.totalAmount,
       subject:'Admin Greetings',
       message:'Thank You For Using Our Service'
     });
@@ -124,7 +199,7 @@ export class RegisterInterfaceComponent implements OnInit {
 
   paymentStart(){
     console.log("payment started --")
-    let amount= this.totalAmount;
+    let amount= this.billAmount;
     console.log(amount);
   
   $.ajax(

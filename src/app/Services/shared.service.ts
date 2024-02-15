@@ -6,10 +6,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class SharedService {
-  private tokenSource = new BehaviorSubject<number>(0);
+  private tokenSource = new BehaviorSubject<string>('');
   currentToken = this.tokenSource.asObservable();
 
-  updateToken(token: number): void {
+  updateToken(token: string): void {
     this.tokenSource.next(token);
   }
 }

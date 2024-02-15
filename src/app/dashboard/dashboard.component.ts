@@ -17,7 +17,7 @@ export class DashboardComponent {
 
   constructor(private activateRoute:ActivatedRoute,private apiService:ApiService) { }
 
-  userinfo:any = { userName: '', email:'', phoneNo:''};
+  userinfo:any = { userName: '', email:'', phoneNo:'',bookedSlot:''};
 
  history : any={};
 

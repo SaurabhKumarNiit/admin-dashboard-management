@@ -1,15 +1,20 @@
-/* booking.component.css */
 
-.booking-container {
-    max-width: 400px;
+
+
+/* .booking-container {
+    max-width: 1000px;
     margin: auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
+  } */
+  /* .time-slots-panel{
+    max-width: 200px;
+  } */
   .form-group {
+    margin-left: 10px;
+    max-width: 200px;
     margin-bottom: 15px;
   }
   
@@ -28,7 +33,7 @@
     border-radius: 3px;
   }
   
-  button {
+  .book-btn {
     background-color: #4caf50;
     color: white;
     padding: 10px 15px;
